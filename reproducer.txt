@@ -1,5 +1,11 @@
 Reproducer
 
+Rename appropiate build.* for environment fore each project.
+build.xml-JBOSS -> build.xml
+build.xml-WL    -> build.xml
+
+
+
 Environment variable to set to the location of the where entity-jts1 & entity-jts2 are extracted:
 	export EJB3_TUTORIAL_HOME=/folder/where/entity-jts1 & entity-jts2 were extracted
 
