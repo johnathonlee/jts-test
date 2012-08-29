@@ -30,7 +30,38 @@
       <pathelement location="${build.classes.dir}"/>
    </path>
 
-   <property name="build.classpath" refid="classpath"/>
+<property name="weblogic.home" value="${env.WEBLOGIC_HOME"/>
+<property name="weblogic.modules" value="${env.WEBLOGIC_MODULES" />
+<property name="wls.username" value="weblogic" />
+<property name="wls.password" value="weblogic123" />
+<property name="wls.hostname" value="localhost" />
+<property name="wls.port" value="7001" />
+<property name="admin.server.name" value="AdminServer" />
+<property name="deploy.target" value="AdminServer" />
+
+<!-- WLS Build classpath -->
+<path id="classpath">
+    <fileset dir="${weblogic.home}/server/lib">
+        <include name="web*.jar"/>
+    </fileset>
+	<fileset dir="${weblogic.modules}">
+        <include name="web*.jar"/>
+    </fileset>
+	<fileset dir="${build.dir}">
+        <include name="*.jar"/>
+    </fileset>
+</path>
+
+<property name="build.classpath" refid="classpath"/>
+
+<!-- Setting TaskDefinition -->
+<taskdef name="wldeploy" classname="weblogic.ant.taskdefs.management.WLDeploy">
+    <classpath>
+     <pathelement location="${weblogic.home}/server/lib/weblogic.jar"/>
+    </classpath>
+</taskdef>
+
+
 
    <!-- =================================================================== -->
    <!-- Prepares the build directory                                        -->
@@ -58,6 +89,9 @@
       <jar jarfile="build/${build.artifact}">
          <fileset dir="${build.classes.dir}">
             <include name="**/*.class"/>
+         </fileset>
+         <fileset dir=".">
+            <include name="jndi.properties"/>
          </fileset>
          <fileset dir=".">
             <include name="META-INF/persistence.xml"/>
@@ -89,10 +123,16 @@
       <delete dir="${jboss.home}/server/${jboss.server.config}/data/hypersonic"/>
    </target>
 
-   <target name="clean">
-      <delete dir="${build.dir}"/>
-      <delete file="${jboss.home}/server/${jboss.server.config}/deploy/${build.artifact}"/>
-   </target>
+<target name="wl_deploy" depends="ejbjar">
+<wldeploy action="deploy"
+          name="${build.artifact}"
+          source="build/${build.artifact}"
+          user="${wls.username}"
+          nostage="true"
+          password="${wls.password}"
+          verbose="true"
+          adminurl="t3://${wls.hostname}:${wls.port}" targets="${deploy.target}" />
+</target>
 
 
 </project>
