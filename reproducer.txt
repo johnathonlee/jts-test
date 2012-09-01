@@ -32,6 +32,11 @@ clean EAP instances:
 	    |-- picketlink
 	    |-- resteasy
 	    `-- seam
+	    
+Changes for jboss-eap-5.1-2
+server/all/deploy/messaging/messaging-service.xml:<attribute name="ServerPeerID">${jboss.messaging.ServerPeerID:1}</attribute>
+server/all/conf/jbossts.properties:<property name="com.arjuna.ats.arjuna.xa.nodeIdentifier" value="2"/>
+
     
 Each server will need the mysql-connector-java-5.1.21-bin.jar (included in the zip):
 	jboss-eap-5.1-1/jboss-as/server/all/lib/mysql-connector-java-5.1.21-bin.jar
@@ -69,6 +74,10 @@ Install JTS onto both servers
 	
 	BUILD SUCCESSFUL
 	Total time: 0 seconds
+	
+Changes for jboss-eap-5.1-2
+	server/all/deploy/messaging/messaging-service.xml:<attribute name="ServerPeerID">${jboss.messaging.ServerPeerID:1}</attribute>
+	server/all/conf/jbossts.properties:<property name="com.arjuna.ats.arjuna.xa.nodeIdentifier" value="2"/>	
 
 Make sure you have MySQL
 	[jolee@jolee JTS-Test]$ sudo systemctl start mysqld.service
@@ -99,7 +108,7 @@ Create the jts_test schema:
 
 Start your clustered EAP instances (nodename may need to be updated for the 2nd)
 	/opt/jboss/JTS-Test/jboss-eap-5.1-1/jboss-as/bin/run.sh -c all
-	/opt/jboss/JTS-Test/jboss-eap-5.1-2/jboss-as/bin/run.sh -c all
+	/opt/jboss/JTS-Test/jboss-eap-5.1-2/jboss-as/bin/run.sh -c all -Djboss.service.binding.set=ports-01
 
 
 Deploy to 5.1-1 & 5.1.2

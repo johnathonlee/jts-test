@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+
+<!-- ======================================================================= -->
+<!-- JBoss build file                                                       -->
+<!-- ======================================================================= -->
+
+<project name="JBoss" default="deploy" basedir=".">
+
+   <property name="src.dir" value="${basedir}/src"/>
+    <property name="jboss.server.config" value="all"/>
+	<property name="build.dir" value="${basedir}/build"/>
+	<property name="build.classes.dir" value="${build.dir}/classes"/>
+	<property name="build.artifact" value="jboss-ejb3-tutorial-entity.jar"/>
+
+
+<property name="weblogic.home" value="C:\Mugdha\Weblogic1\wls1035_dev\wlserver"/>
+<property name="weblogic.modules" value="C:\Mugdha\Weblogic1\wls1035_dev\modules" />
+<property name="wls.username" value="weblogic" />
+<property name="wls.password" value="weblogic123" />
+<property name="wls.hostname" value="localhost" />
+<property name="wls.port" value="7001" />
+<property name="admin.server.name" value="AdminServer" />
+<property name="deploy.target" value="AdminServer" />
+
+<!-- WLS Build classpath 
+<path id="classpath">
+    <fileset dir="${weblogic.home}/server/lib">
+        <include name="web*.jar"/>
+    </fileset>
+	<fileset dir="${weblogic.modules}">
+        <include name="web*.jar"/>
+    </fileset>
+	<fileset dir="${build.dir}">
+        <include name="*.jar"/>
+    </fileset>
+</path>
+-->
+
+<property name="build.classpath" refid="classpath"/>
+
+<!-- Setting TaskDefinition -->
+<taskdef name="wldeploy" classname="weblogic.ant.taskdefs.management.WLDeploy">
+    <classpath>
+     <pathelement location="${weblogic.home}/server/lib/weblogic.jar"/>
+    </classpath>
+</taskdef>
+
+   <!-- =================================================================== -->
+   <!-- Prepares the build directory                                        -->
+   <!-- =================================================================== -->
+   <target name="prepare">
+      <mkdir dir="${build.dir}"/>
+      <mkdir dir="${build.classes.dir}"/>
+   </target>
+
+   <!-- =================================================================== -->
+   <!-- Compiles the source code                                            -->
+   <!-- =================================================================== -->
+   <target name="compile" depends="prepare">
+      <javac srcdir="${src.dir}"
+         destdir="${build.classes.dir}"
+         debug="on"
+         deprecation="on"
+         optimize="off"
+         includes="**">
+         <classpath refid="classpath"/>
+      </javac>
+   </target>
+
+   <target name="ejbjar" depends="compile">
+      <jar jarfile="build/${build.artifact}">
+         <fileset dir="${build.classes.dir}">
+            <include name="**/*.class"/>
+         </fileset>
+         <fileset dir=".">
+            <include name="jndi.properties"/>
+         </fileset>
+         <fileset dir=".">
+            <include name="META-INF/persistence.xml"/>
+         </fileset>
+      </jar>
+   </target>
+
+<!--
+   <target name="entity2xml" depends="prepare">
+      <java fork="yes" failOnError="true" className="org.jboss.ejb3.entity.EntityToHibernateXml">
+         <classpath refid="classpath"/>
+         <arg value="org.jboss.tutorial.entity.bean.Order"/>
+         <arg value="org.jboss.tutorial.entity.bean.LineItem"/>
+      </java>
+   </target>
+-->
+
+   <target name="run" depends="ejbjar">
+      <java classname="org.jboss.tutorial.entity.client.Client" fork="yes" dir=".">
+         <classpath refid="classpath"/>
+         <sysproperty key="cnt"
+                   value="20"
+                   />
+      </java>
+   </target>
+
+
+<target name="deploy" depends="ejbjar">
+<wldeploy action="deploy"
+          name="${build.artifact}"
+          source="build/${build.artifact}"
+          user="${wls.username}"
+          nostage="true"
+          password="${wls.password}"
+          verbose="true"
+          adminurl="t3://${wls.hostname}:${wls.port}" targets="${deploy.target}" />
+</target>
+
+
+</project>
+
