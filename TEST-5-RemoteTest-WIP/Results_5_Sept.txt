@@ -1,0 +1,42 @@
+
+After making the SEQUENCE Generation settings in the source code as following the code is getting executed successfully on WebLogic: (And created Tables on MySQL as mentioned in the link:  http://pastebin.test.redhat.com/105001)
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id", unique = true, nullable = false, length = 10)
+	
+	
+Following results were observwed from WebLogic side while using  "com.mysql.jdbc.jdbc2.optional.MysqlXADataSource" MySQL XA driver:
+
+ACID transaction in WLS-1 and WLS-2   (5-Sept-2012 test)
+===============================================
+WebLogic takes :
+1). First iteration immediately after restarting both WLS-1 and WLS-2
+
+ iterations: 10 Run time: 16623
+
+2). Running iterations again without WLS-1 & WLS-2 restart
+
+iterations: 10 Run time: 17074
+
+iterations: 10 Run time: 16507
+
+iterations: 10 Run time: 16805
+
+=================================================
+
+For "20" iteration each test:
+
+iterations: 20 Run time: 31194
+
+iterations: 20 Run time: 30045
+
+iterations: 20 Run time: 32037
+
+==================================================
+
+For "100" iteration each test:
+
+iterations: 100 Run time: 140801
+
+iterations: 100 Run time: 144213

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--weblogic-version:10.3.5-->
+<wls:weblogic-ejb-jar xmlns:wls="http://xmlns.oracle.com/weblogic/weblogic-ejb-jar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd http://xmlns.oracle.com/weblogic/weblogic-ejb-jar http://xmlns.oracle.com/weblogic/weblogic-ejb-jar/1.2/weblogic-ejb-jar.xsd">
+
+    <wls:weblogic-enterprise-bean>
+     <wls:ejb-name>FreeBean</wls:ejb-name>
+     <wls:stateless-session-descriptor>
+         <wls:business-interface-jndi-name-map>
+            <wls:business-remote>org.jboss.tutorial.entity.bean.Free</wls:business-remote>
+            <wls:jndi-name>FreeBean/remote</wls:jndi-name>
+         </wls:business-interface-jndi-name-map>
+     </wls:stateless-session-descriptor>
+  </wls:weblogic-enterprise-bean>
+
+</wls:weblogic-ejb-jar>

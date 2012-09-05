@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jdbc-data-source xmlns="http://xmlns.oracle.com/weblogic/jdbc-data-source" xmlns:sec="http://xmlns.oracle.com/weblogic/security" xmlns:wls="http://xmlns.oracle.com/weblogic/security/wls" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.oracle.com/weblogic/jdbc-data-source http://xmlns.oracle.com/weblogic/jdbc-data-source/1.0/jdbc-data-source.xsd">
+  <name>MysqlDS</name>
+  <jdbc-driver-params>
+    <url>jdbc:mysql://lab-jboss-db.gsslab.pnq.redhat.com:3306/mysql</url>
+    <driver-name>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</driver-name>
+    <!--driver-name>com.mysql.jdbc.Driver</driver-name-->
+    <properties>
+      <property>
+        <name>user</name>
+        <value>root</value>
+      </property>
+      <property>
+        <name>databaseName</name>
+        <value>mysql</value>
+      </property>
+    </properties>
+    <password-encrypted>{AES}2gRpBPVcfVnz21i17/llYJWDeWHLMsU4SB2XzdYI/Zw=</password-encrypted>
+  </jdbc-driver-params>
+  
+    <jdbc-data-source-params>
+       <jndi-name>MysqlDS</jndi-name>
+       <keep-conn-after-local-tx>true</keep-conn-after-local-tx>
+    </jdbc-data-source-params>
+  
+    <jdbc-connection-pool-params>
+      <initial-capacity>4</initial-capacity>
+      <max-capacity>4</max-capacity>
+      <capacity-increment>2</capacity-increment>
+      <shrink-frequency-seconds>900</shrink-frequency-seconds>
+      <test-connections-on-reserve>true</test-connections-on-reserve>
+      <test-table-name>SQL SELECT 1</test-table-name>
+      <login-delay-seconds>0</login-delay-seconds>
+      <jdbc-xa-debug-level>10</jdbc-xa-debug-level>
+  </jdbc-connection-pool-params>
+</jdbc-data-source>

@@ -1,0 +1,37 @@
+DROP TABLE DATA_ITEM;
+
+DROP TABLE NEXT_DATA_ITEM;
+
+DROP TABLE LineItem;
+
+DROP TABLE PURCHASE_ORDER CASCADE;
+
+
+CREATE TABLE `DATA_ITEM` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `string` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
+
+CREATE TABLE `NEXT_DATA_ITEM` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `string` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
+
+CREATE TABLE `PURCHASE_ORDER` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `total` double NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
+
+CREATE TABLE `LineItem` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `product` varchar(255) DEFAULT NULL,
+  `quantity` int(10) unsigned NOT NULL,
+  `subtotal` double NOT NULL,
+  `order_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK4AAEE947F4C206B8` (`order_id`),
+  CONSTRAINT `FK4AAEE947F4C206B8` FOREIGN KEY (`order_id`) REFERENCES `PURCHASE_ORDER` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
