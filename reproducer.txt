@@ -1,13 +1,7 @@
 Reproducer
 
-Rename appropiate build.* for environment fore each project.
-build.xml-JBOSS -> build.xml
-build.xml-WL    -> build.xml
-
-
-
 Environment variable to set to the location of the where entity-jts1 & entity-jts2 are extracted:
-	export EJB3_TUTORIAL_HOME=/folder/where/entity-jts1 & entity-jts2 were extracted
+	export EJB3_TUTORIAL_HOME=The <source> parent folder of entity-jts1 & entity-jts2 were extracted
 
 Instances should be managed in separate consoles:
 for jboss-eap-5.1-1
