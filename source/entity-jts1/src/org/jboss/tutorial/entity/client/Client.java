@@ -45,7 +45,7 @@ public class Client {
 
 	public Client() {
 		long startTime = System.currentTimeMillis();
-		int iter = 100;
+		int iter = 3;
 
 		try {
                 Properties prop=new Properties();

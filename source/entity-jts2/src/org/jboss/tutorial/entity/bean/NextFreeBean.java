@@ -26,55 +26,27 @@ import javax.ejb.Remote;
 import javax.ejb.Remove;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.naming.InitialContext;
-import javax.naming.Context;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Properties;
 
 @Stateless
-@Remote(Free.class)
+@Remote(NextFree.class)
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
-public class FreeBean implements Free, java.io.Serializable {
+public class NextFreeBean implements Free, java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	@PersistenceContext
 	private EntityManager manager;
-	DataItem di = null;
-	static InitialContext context = null;
+	NextDataItem di = null;
 
 	public void sayFree() {
-		System.out.println("Free =================sayFree()");
-		di = new DataItem();
-		di.setString("free item");
-		//if (true) {
-		//	getNextFreeStuff();
-		//}
-	}
-
-	public void getNextFreeStuff() {
-
-		try {
-			if (context == null) {
-				Properties prop=new Properties();
-				prop.put(Context.INITIAL_CONTEXT_FACTORY,"org.jnp.interfaces.NamingContextFactory");
-				prop.put(Context.PROVIDER_URL,"127.0.0.1:1100");
-				context = new InitialContext(prop);
-				System.out.println("InitialContext created for FreeBean");
-			}
-			Object obj = context.lookup("NextFreeBean/remote");
-			System.out.println("-->> found: NextFreeBean/remote");
-			NextFree free = (NextFree) obj;
-			free.sayFree();
-			free.leaveFree();
-
-		} catch (Throwable ex) {
-			ex.printStackTrace();
-		} 
+		System.out.println("NextFreeBean ==== sayFree");
+		di = new NextDataItem();
+		di.setString("next free item");
 	}
 
 	@Remove
 	public void leaveFree() {
-		System.out.println("Free ============== leaveFree");
+		System.out.println("NextFreeBean ==== RemoveNextFree");
 		manager.persist(di);
 	}
 }
