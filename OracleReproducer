@@ -1,0 +1,14 @@
+Oracle Reproducer
+
+<JBOSS_HOME_EAP5.0.1> & <JBOSS_HOME_EAP5.2.0>
+  Install JTS
+  Install Oracle
+  
+  lab-orac-11g-1.gsslab.rdu2.redhat.com:1521:ORCL
+  jtstest/jtstest
+  
+  export JBOSS_HOME=/opt/jboss/jboss-eap-5.2/jboss-as/
+  bin/run.sh -c all
+  
+  export JBOSS_HOME=/opt/jboss/jboss-eap-5.0.1/jboss-as/
+  bin/run.sh -c all -Djboss.service.binding.set=ports-01 -Djboss.messaging.ServerPeerID=1 -Dcom.arjuna.ats.arjuna.xa.nodeIdentifier=2

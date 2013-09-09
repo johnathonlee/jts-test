@@ -21,6 +21,7 @@
    		<!-- Only the jbossall-client.jar should ideally be sufficient -->
       <fileset dir="${jboss.home}/client">
          <include name="**/jbossall-client.jar"/>
+      	 <include name="**/jbossjts-jacorb.jar"/>
       </fileset>
 		<!-- javax.persistence.* -->
    		<fileset dir="${jboss.home}/common/lib">

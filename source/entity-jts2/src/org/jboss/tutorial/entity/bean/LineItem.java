@@ -28,8 +28,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "LINE_ITEM")
 public class LineItem implements java.io.Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -41,8 +43,7 @@ public class LineItem implements java.io.Serializable
 
 
    @Id
-   @GeneratedValue(strategy=GenerationType.IDENTITY)
-   @Column(name="id", unique = true, nullable = false, length = 10)
+   @GeneratedValue
    public int getId()
    {
       return id;

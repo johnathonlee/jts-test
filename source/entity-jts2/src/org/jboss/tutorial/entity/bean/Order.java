@@ -43,8 +43,7 @@ public class Order implements java.io.Serializable {
 	private Collection<LineItem> lineItems;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id", unique = true, nullable = false, length = 10)
+	@GeneratedValue
 	public int getId() {
 		return id;
 	}

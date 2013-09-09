@@ -27,6 +27,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 @Table(name = "DATA_ITEM")
@@ -36,12 +37,11 @@ public class DataItem implements java.io.Serializable {
 	private String string;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id", unique = true, nullable = false, length = 10)
-	public int getId() {
+	@GeneratedValue
+	public int getid(){
 		return id;
 	}
-
+	
 	public void setId(int id) {
 		this.id = id;
 	}

@@ -36,9 +36,8 @@ public class DataItem implements java.io.Serializable {
 	private String string;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id", unique = true, nullable = false, length = 10)
-	public int getId() {
+	@GeneratedValue
+	public int getid(){
 		return id;
 	}
 
