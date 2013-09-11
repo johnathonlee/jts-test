@@ -6,7 +6,7 @@
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 2.1 of
+ * published by the VmTwoBeanOne Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
  *
  * This software is distributed in the hope that it will be useful,
@@ -15,11 +15,11 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
+ * License along with this software; if not, write to the VmTwoBeanOne
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.tutorial.entity.bean;
+package org.jboss.gss.jtstest;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,19 +28,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "LINE_ITEM")
-public class LineItem implements java.io.Serializable
+public class VmOneBeanThree implements java.io.Serializable
 {
     private static final long serialVersionUID = 1L;
     private int id;
     private double subtotal;
     private int quantity;
     private String product;
-    private Order order;
-
+    private VmOneBeanTwo vmOneBeanTwo;
 
    @Id
    @GeneratedValue
@@ -48,7 +48,7 @@ public class LineItem implements java.io.Serializable
    {
       return id;
    }
-
+   
    public void setId(int id)
    {
       this.id = id;
@@ -86,13 +86,13 @@ public class LineItem implements java.io.Serializable
 
    @ManyToOne
    @JoinColumn(name = "order_id")
-   public Order getOrder()
+   public VmOneBeanTwo getOrder()
    {
-      return order;
+      return vmOneBeanTwo;
    }
 
-   public void setOrder(Order order)
+   public void setOrder(VmOneBeanTwo vmOneBeanTwo)
    {
-      this.order = order;
+      this.vmOneBeanTwo = vmOneBeanTwo;
    }
 }

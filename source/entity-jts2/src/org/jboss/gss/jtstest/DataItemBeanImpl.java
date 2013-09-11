@@ -6,7 +6,7 @@
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 2.1 of
+ * published by the VmTwoBeanOne Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
  *
  * This software is distributed in the hope that it will be useful,
@@ -15,12 +15,14 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
+ * License along with this software; if not, write to the VmTwoBeanOne
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.tutorial.entity.bean;
+package org.jboss.gss.jtstest;
 
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,7 +33,8 @@ import javax.persistence.SequenceGenerator;
 
 @Entity
 @Table(name = "DATA_ITEM")
-public class DataItem implements java.io.Serializable {
+@TransactionAttribute(TransactionAttributeType.MANDATORY)
+public class DataItemBeanImpl implements java.io.Serializable, DataItemBean {
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String string;

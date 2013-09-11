@@ -6,7 +6,7 @@
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 2.1 of
+ * published by the VmTwoBeanOne Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
  *
  * This software is distributed in the hope that it will be useful,
@@ -15,11 +15,11 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
+ * License along with this software; if not, write to the VmTwoBeanOne
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.tutorial.entity.client;
+package org.jboss.gss.jtstest.client;
 
 import javax.naming.InitialContext;
 import javax.naming.Context;
@@ -28,9 +28,9 @@ import javax.transaction.*;
 
 import java.util.Properties;
 
-import org.jboss.tutorial.entity.bean.LineItem;
-import org.jboss.tutorial.entity.bean.Order;
-import org.jboss.tutorial.entity.bean.ShoppingCart;
+import org.jboss.gss.jtstest.VmOneBeanThree;
+import org.jboss.gss.jtstest.VmOneBeanTwo;
+import org.jboss.gss.jtstest.VmOneBeanOne;
 
 /**
  * Comment
@@ -40,40 +40,64 @@ import org.jboss.tutorial.entity.bean.ShoppingCart;
  */
 public class Client implements Runnable{
 	
-	int iter = 25;
-	public Client(int iter) {
-		super();
-		this.iter = iter;
-	}
-
-	public int getIter() {
-		return iter;
-	}
-
-	public void setIter(int iter) {
-		this.iter = iter;
-	}
-
-	InitialContext ctx;
-	private UserTransaction ut = null;
-	
 	public static void main(String[] args) throws Exception {
  
-		int i = 0;
+		int i = 1;
 		
-		while (i < 5){
-			Client c = new Client();
-			c.run();
+
+		while (i < 6){
+			Thread thread = new Thread(new Client());  
+			thread.start();
+			System.out.println("Started: " + i);
 			i++;
 		}
 		 
 	}
-	
+	InitialContext ctx;
+
+	int iter = 5;
+
+	private UserTransaction ut = null;
+
 	public Client() throws Exception {
-
-
 	}
+	
+	public Client(int iter) {
+		super();
+		this.iter = iter;
+	}
+	
+	public void beginWork(InitialContext ctx, int x) {
 
+		System.out.println("beginWork");
+		for (int cnt = 0; cnt <= x; cnt++) {
+				
+				try {
+						VmOneBeanOne beanOne = (VmOneBeanOne) ctx
+								.lookup("VmOneBeanOneImpl/remote");
+		
+						System.out.println("VmOneBeanOneImpl.doWork1");
+						beanOne.doWork("work1", 2, 500.00);
+						System.out.println("VmOneBeanOneImpl.doWork2");
+						beanOne.doWork("work2", 1, 2000.00);
+		
+						System.out.println("work results:");
+						VmOneBeanTwo vmOneBeanTwo = beanOne.getVmOneBeanTwo();
+						System.out.println("Total: $" + vmOneBeanTwo.getTotal());
+						for (VmOneBeanThree item : vmOneBeanTwo.getLineItems()) {
+							System.out.println(item.getQuantity() + "     "
+									+ item.getProduct() + "     " + item.getSubtotal());
+						}
+		
+						System.out.println("Checkout purchase: " + cnt);
+						beanOne.removeWork();
+				} catch (Throwable ex) {
+						System.out.println("beginWork:");
+						ex.printStackTrace();
+				}
+		}
+	}
+	
 	private void commitUtx() {
 		try {
 			ut.commit();
@@ -101,38 +125,7 @@ public class Client implements Runnable{
 		}
 	}
 
-	public void buyStuff(InitialContext ctx, int x) {
-
-		System.out.println("buyStuff");
-		for (int cnt = 0; cnt <= x; cnt++) {
-				
-				try {
-						ShoppingCart cart = (ShoppingCart) ctx
-								.lookup("ShoppingCartBean/remote");
-		
-						System.out.println("Buying 2 memory sticks");
-						cart.buy("Memory stick", 2, 500.00);
-						System.out.println("Buying a laptop");
-						cart.buy("Laptop", 1, 2000.00);
-		
-						System.out.println("Print cart:");
-						Order order = cart.getOrder();
-						System.out.println("Total: $" + order.getTotal());
-						for (LineItem item : order.getLineItems()) {
-							System.out.println(item.getQuantity() + "     "
-									+ item.getProduct() + "     " + item.getSubtotal());
-						}
-		
-						System.out.println("Checkout purchase: " + cnt);
-						cart.checkout();
-				} catch (Throwable ex) {
-						System.out.println("buyStuff: first catch");
-						ex.printStackTrace();
-				}
-		}
-	}
-	
-    private void getContext() {
+	private void getContext() {
     	try {
     		if (ctx == null) {
     			Properties prop=new Properties();
@@ -147,8 +140,11 @@ public class Client implements Runnable{
     		e.printStackTrace();
     	}    	
 	}
-    
-    
+
+	public int getIter() {
+		return iter;
+	}
+	
     private UserTransaction getUtx() throws Exception {
     	System.out.println("------------------> getUtx()");
     	Properties properties = new Properties();
@@ -165,6 +161,37 @@ public class Client implements Runnable{
 		
 		return utx;
     }
+    
+    
+    @Override
+	public void run() {
+		long startTime = System.currentTimeMillis();
+		
+
+		getContext();
+
+		try {
+			if (startUtx()){
+
+				System.out.println("------------------> startUtx Passed");
+				beginWork(ctx, iter);
+
+				commitUtx();  
+
+				long stopTime = System.currentTimeMillis();
+				long runTime = stopTime - startTime;
+				System.out.println("iterations: " + iter + " Run time: " + runTime);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+	public void setIter(int iter) {
+		this.iter = iter;
+	}
 
 	private boolean startUtx() throws Exception{
 		System.out.println("------------------> startUtx()");
@@ -180,32 +207,5 @@ public class Client implements Runnable{
 		started = true;
 
 		return started;
-	}
-
-	@Override
-	public void run() {
-		long startTime = System.currentTimeMillis();
-		
-
-		getContext();
-
-		try {
-			if (startUtx()){
-
-				System.out.println("------------------> startUtx Passed");
-				buyStuff(ctx, iter);
-
-				commitUtx();  
-
-				long stopTime = System.currentTimeMillis();
-				long runTime = stopTime - startTime;
-				System.out.println("iterations: " + iter + " Run time: " + runTime);
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
 	}
 }

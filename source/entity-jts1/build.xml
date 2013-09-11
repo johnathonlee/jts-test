@@ -75,7 +75,7 @@
       </java>
    </target>
    <target name="run" depends="ejbjar">
-      <java classname="org.jboss.tutorial.entity.client.Client" fork="yes" dir=".">
+      <java classname="org.jboss.gss.jtstest.client.Client" fork="yes" dir=".">
          <classpath refid="classpath"/>
          <sysproperty key="cnt"
                    value="20"

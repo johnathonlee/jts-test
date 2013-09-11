@@ -1,5 +1,22 @@
 Oracle Reproducer
 
+
+drop user jtstest cascade;
+
+create user jtstest identified by jtstest
+
+grant connect to jtstest
+
+ALTER USER jtstest QUOTA 100M ON USERS
+
+grant CREATE TABLE to jtstest
+
+grant CREATE SEQUENCE to jtstest
+
+
+
+
+
 <JBOSS_HOME_EAP5.0.1> & <JBOSS_HOME_EAP5.2.0>
   Install JTS
   Install Oracle

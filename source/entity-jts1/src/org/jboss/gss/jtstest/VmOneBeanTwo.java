@@ -6,7 +6,7 @@
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 2.1 of
+ * published by the VmTwoBeanOne Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
  *
  * This software is distributed in the hope that it will be useful,
@@ -15,32 +15,46 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
+ * License along with this software; if not, write to the VmTwoBeanOne
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.tutorial.entity.bean;
+package org.jboss.gss.jtstest;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Column;
 
 @Entity
 @Table(name = "PURCHASE_ORDER")
-public class Order implements java.io.Serializable {
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
+public class VmOneBeanTwo implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
+	private Collection<VmOneBeanThree> vmOneBeanThrees;
 	private double total;
-	private Collection<LineItem> lineItems;
+
+	public void addPurchase(String product, int quantity, double price) {
+		if (vmOneBeanThrees == null){
+			vmOneBeanThrees = new ArrayList<VmOneBeanThree>();
+		}
+		VmOneBeanThree beanThree = new VmOneBeanThree();
+		beanThree.setOrder(this);
+		beanThree.setProduct(product);
+		beanThree.setQuantity(quantity);
+		beanThree.setSubtotal(quantity * price);
+		vmOneBeanThrees.add(beanThree);
+		total += quantity * price;
+	}
 
 	@Id
 	@GeneratedValue
@@ -48,36 +62,24 @@ public class Order implements java.io.Serializable {
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
+	public Collection<VmOneBeanThree> getLineItems() {
+		return vmOneBeanThrees;
 	}
 
 	public double getTotal() {
 		return total;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setLineItems(Collection<VmOneBeanThree> vmOneBeanThrees) {
+		this.vmOneBeanThrees = vmOneBeanThrees;
+	}
+
 	public void setTotal(double total) {
 		this.total = total;
-	}
-
-	public void addPurchase(String product, int quantity, double price) {
-		if (lineItems == null)
-			lineItems = new ArrayList<LineItem>();
-		LineItem item = new LineItem();
-		item.setOrder(this);
-		item.setProduct(product);
-		item.setQuantity(quantity);
-		item.setSubtotal(quantity * price);
-		lineItems.add(item);
-		total += quantity * price;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
-	public Collection<LineItem> getLineItems() {
-		return lineItems;
-	}
-
-	public void setLineItems(Collection<LineItem> lineItems) {
-		this.lineItems = lineItems;
 	}
 }
